@@ -6,6 +6,11 @@ class Phrase {
         this.phrase = phrase.toLowerCase();
     }
 
+    /**
+     * Splits the phrase string into an array of characters and 
+     * then creates the HTML according to the example in examples_phrase_html.txt
+     * 
+     */
     addPhraseToDisplay = () =>{
         const phraseChar = this.phrase.split("");
         const phraseUL = document.querySelector("#phrase ul");
