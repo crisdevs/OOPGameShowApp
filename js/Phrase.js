@@ -34,7 +34,7 @@ class Phrase {
     /**
      * Checks to see if the letter selected by the player matches a letter in the phrase.
      * 
-     * @return {boolean || string} - The matched letter
+     * @return {boolean} - True or False whether the letter guessed matches the phrase to be guessed.
      */
     checkLetter = (target) =>{
         const phraseLetters = document.querySelectorAll(".letter");
@@ -42,7 +42,6 @@ class Phrase {
                 for(let j = 0; j < phraseLetters.length; j++){
                     if(target.textContent === phraseLetters[j].textContent){
                         return true;
-                        console.log(phraseLetters[j].textContent);
                     }
                 }
 
@@ -50,18 +49,16 @@ class Phrase {
     }
 
     /**
-     * Shows matched letters.NEEDS TO BE REDONE!!!!!!
+     * Shows correctly matched letters.
      */
     showMatchedLetter = (target) =>{
         const letter = target.textContent;
         const phrase = document.querySelectorAll(`.${letter}`);
 
-        if(phrase.length > 0){
             for(let i =0; i < phrase.length; i++){
                 phrase[i].classList.remove("hide");
                 phrase[i].classList.add("show");
             }
-        }
       
     }
 }

@@ -5,7 +5,7 @@ class Game {
 
     constructor(){
         this.missed = 0;
-        this.phrases = ["Break a Leg", "Dig in", "Gotcha", "Hold your horses", "I declare"];
+        this.phrases = [new Phrase("Dig in"), new Phrase("Gotcha"), new Phrase("Hold your horses"), new Phrase("I declare")];
         this.activePhrase = null;
     }
     /**
@@ -14,7 +14,7 @@ class Game {
     startGame = () =>{
         document.querySelector("#overlay").style.display = "none";
 
-        this.activePhrase = new Phrase(this.getRandomPhrase());
+        this.activePhrase = this.getRandomPhrase();
         this.activePhrase.addPhraseToDisplay();
     }
 
@@ -25,10 +25,13 @@ class Game {
      */
     getRandomPhrase = () =>{
         const randNum = Math.floor(Math.random() * this.phrases.length);
-        console.log(this.phrases[randNum]);
         return this.phrases[randNum];
     }
-
+    /**
+     * Disables the button, checks the letter that was guessed and checks to see if a player has won or ran out of lives. 
+     * 
+     * @param {HTML} target - The button key that was clicked. 
+     */
     handleInteraction = (target) =>{
         target.disabled = true;
 
@@ -46,6 +49,9 @@ class Game {
 
     }
 
+    /**
+     * Removes a life from the user and updates the img src attribute to reflect the loss of chances.
+     */
     removeLife = () =>{
         const heartIMG = document.querySelectorAll(".tries img");
         
@@ -57,6 +63,9 @@ class Game {
         }
     }
 
+    /**
+     * Checks to see if all letters that were hidden are now visible which would indicate a win.
+     */
     checkForWin = () =>{
         const letterHTML = document.querySelectorAll("#phrase li");
         let counter = 0;
@@ -72,12 +81,56 @@ class Game {
         }
     }
 
-
+    /**
+     * Ends the game and displays an overlay and gets a different message whether they win or lose.
+     * 
+     * @param {string} outcome - The reason why the game is ending win/lose. 
+     */
     gameOver = (outcome) =>{
+        let startingMessage = "";
         document.querySelector("#overlay").style.display = "flex";
-        document.querySelector("#game-over-message").textContent = `You ${outcome}!`;
+        const keyButtons = document.querySelectorAll(".key");
+
+        if(outcome === "lose"){
+            startingMessage = "Sorry";
+            document.querySelector("#overlay").classList.remove("win");
+        }
+        else{
+            startingMessage = "Congrats ";
+            document.querySelector("#overlay").classList.remove("lose");
+        }
+        document.querySelector("#game-over-message").textContent = `${startingMessage} you ${outcome}!`;
         document.querySelector("#overlay").classList.remove("start");
         document.querySelector("#overlay").classList.add(`${outcome}`);
 
+        //To make the game unplayable after game overlay screen is shown
+        for(let i =0; i < keyButtons.length; i++){
+            keyButtons[i].disabled = true;
+        }
+    }
+
+    /**
+     * Resets the game by removing the phrase letters. Removing the classes added to the buttons and reenabling the buttons.
+     */
+    reset = () =>{
+        document.querySelector("#phrase ul").innerHTML = "";
+        const keys = document.querySelectorAll(".key");
+        const heartIMG = document.querySelectorAll(".tries img");
+
+        for(let i =0; i < keys.length; i++){
+            if(keys[i].classList.contains("chosen")){
+                keys[i].classList.remove("chosen");
+            }
+            else if(keys[i].classList.contains("wrong")){
+                keys[i].classList.remove("wrong");
+            }
+
+            keys[i].disabled = false;
+        }
+
+        for(let j =0; j < heartIMG.length; j++){
+            heartIMG[j].src = "images/liveHeart.png";
+        }
+        
     }
 }
