@@ -7,9 +7,9 @@
   --color-win: #78CF82;
   --color-lose: #D94545;
   --color-start: #5b85b7;
-  --color-neutral: #445069;
+  --color-neutral: #445f69;
   --color-neutral-light: #D2D2D2;
-  --color-keys: #37474F;
+  --color-keys: #4d4f37;
   --color-keys-light: #E5E5E5;
   --font-size-large: 60px;
   --font-size-medium: 20px;
@@ -58,6 +58,11 @@ button {
   -o-transition: var(--transition);
   transition: var(--transition);
   cursor: pointer;
+}
+/* Added Hover to change button color */
+button:hover{
+  background-color: #445f69;
+  color:#E5E5E5;
 }
 
 #btn__reset {
@@ -136,8 +141,18 @@ button {
   font-size: var(--font-size-medium);
   color: #FFFFFF;
 }
+/* When hovered over chosen keys it stays the same color. */
+.chosen:hover{
+  color: #FFFFFF;
+  background: #3a3f58;
+}
 
 .wrong {
+  background: #f7a964;
+  color: #FFFFFF;
+}
+/* When hovered over wrong answered keys it stays the same color. */
+.wrong:hover{
   background: #f7a964;
   color: #FFFFFF;
 }
