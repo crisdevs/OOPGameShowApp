@@ -6,9 +6,10 @@ class Game {
     this.missed = 0;
     this.phrases = [
       new Phrase("Dig in"),
-      new Phrase("Gotcha"),
+      new Phrase("Cup of Joe"),
       new Phrase("Hold your horses"),
       new Phrase("I declare"),
+      new Phrase("A piece of cake"),
     ];
     this.activePhrase = null;
   }
@@ -38,13 +39,13 @@ class Game {
    */
   handleInteraction = (target) => {
     target.disabled = true;
-
+    //Checks to see if the guessed letter is a correct guess.
     if (this.activePhrase.checkLetter(target)) {
       target.classList.add("chosen");
       this.activePhrase.showMatchedLetter(target);
       if (this.checkForWin()) {
         this.gameOver();
-      }
+      } //If the guess was incorrect.
     } else {
       target.classList.add("wrong");
       this.removeLife();
@@ -55,11 +56,13 @@ class Game {
    * Removes a life from the user and updates the img src attribute to reflect the loss of chances.
    */
   removeLife = () => {
+    //Collection of the heart images.
     const heartIMG = document.querySelectorAll(".tries img");
-
+    //Since the collection starts at zero, I update the heart image first using the default 0 value for missed property.
     heartIMG[this.missed].src = "images/lostHeart.png";
+    //Then it is incremented by 1.
     this.missed++;
-
+    //Checks to see if the player ran out of lives.
     if (this.missed === 5) {
       this.gameOver("lose");
     }
@@ -69,19 +72,20 @@ class Game {
    * Checks to see if all letters that were hidden are now visible which would indicate a win.
    */
   checkForWin = () => {
+    //Collection of all the li tags holding the letters in the phrase.
     const letterHTML = document.querySelectorAll("#phrase li");
-    let counter = 0;
+    let collectedPhrase = "";
 
     for (let i = 0; i < letterHTML.length; i++) {
       if (
         letterHTML[i].classList.contains("show") ||
         letterHTML[i].classList.contains("space")
       ) {
-        counter++;
+        collectedPhrase += letterHTML[i].textContent;
       }
     }
 
-    if (counter === this.activePhrase.phrase.length) {
+    if (collectedPhrase.length === this.activePhrase.phrase.length) {
       this.gameOver("win");
     }
   };
@@ -97,7 +101,7 @@ class Game {
     const keyButtons = document.querySelectorAll(".key");
 
     overlay.style.display = "flex";
-
+    //Adds a winning or losing message depending on the outcome.
     if (outcome === "lose") {
       startingMessage = "Sorry";
       overlay.classList.remove("win");
@@ -124,17 +128,17 @@ class Game {
     document.querySelector("#phrase ul").innerHTML = "";
     const keys = document.querySelectorAll(".key");
     const heartIMG = document.querySelectorAll(".tries img");
-
+    //Looping through the keyboard buttons and removing the added class from the previous game.
     for (let i = 0; i < keys.length; i++) {
       if (keys[i].classList.contains("chosen")) {
         keys[i].classList.remove("chosen");
       } else if (keys[i].classList.contains("wrong")) {
         keys[i].classList.remove("wrong");
       }
-
+      //Reenabiling the keyboard buttons.
       keys[i].disabled = false;
     }
-
+    //Looping through the heart img tags to put the src attribute the its original path.
     for (let j = 0; j < heartIMG.length; j++) {
       heartIMG[j].src = "images/liveHeart.png";
     }
